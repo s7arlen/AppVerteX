@@ -160,12 +160,15 @@
                 transform: translate(-100vw, -100vh);
                 opacity: 0;
             }
+
             8% {
                 opacity: 0.5;
             }
+
             92% {
                 opacity: 0.5;
             }
+
             100% {
                 transform: translate(120vw, 120vh);
                 opacity: 0;
@@ -177,12 +180,15 @@
                 transform: translate(120vw, -50vh);
                 opacity: 0;
             }
+
             8% {
                 opacity: 0.5;
             }
+
             92% {
                 opacity: 0.5;
             }
+
             100% {
                 transform: translate(-100vw, 120vh);
                 opacity: 0;
@@ -194,12 +200,15 @@
                 transform: translate(-50vw, 120vh);
                 opacity: 0;
             }
+
             8% {
                 opacity: 0.5;
             }
+
             92% {
                 opacity: 0.5;
             }
+
             100% {
                 transform: translate(150vw, -100vh);
                 opacity: 0;
@@ -210,9 +219,11 @@
             0% {
                 transform: translate(-20%, -10%) rotate(0deg);
             }
+
             50% {
                 transform: translate(20%, 5%) rotate(180deg);
             }
+
             100% {
                 transform: translate(-20%, -10%) rotate(360deg);
             }
@@ -222,18 +233,23 @@
             0% {
                 transform: translate(15%, 20%) rotate(0deg);
             }
+
             50% {
                 transform: translate(-10%, 5%) rotate(-180deg);
             }
+
             100% {
                 transform: translate(15%, 20%) rotate(-360deg);
             }
         }
 
         @keyframes asteroidGlow {
-            0%, 100% {
+
+            0%,
+            100% {
                 filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.3));
             }
+
             50% {
                 filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.5));
             }
@@ -266,11 +282,11 @@
             left: 50%;
             width: 100%;
             height: 100px;
-            background: linear-gradient(180deg, 
-                rgba(255, 215, 0, 0.6) 0%,
-                rgba(239, 68, 68, 0.4) 40%,
-                rgba(249, 115, 22, 0.2) 70%,
-                transparent 100%);
+            background: linear-gradient(180deg,
+                    rgba(255, 215, 0, 0.6) 0%,
+                    rgba(239, 68, 68, 0.4) 40%,
+                    rgba(249, 115, 22, 0.2) 70%,
+                    transparent 100%);
             transform: translateX(-50%) translateY(-100px);
             filter: blur(8px);
         }
@@ -316,14 +332,19 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 /* Base gradient */
-                linear-gradient(135deg, 
-                    rgba(255, 180, 50, 0.9) 0%,      /* Golden yellow */
-                    rgba(255, 120, 40, 0.85) 25%,    /* Orange-yellow */
-                    rgba(220, 80, 40, 0.9) 50%,      /* Reddish-orange */
-                    rgba(200, 60, 30, 0.9) 75%,      /* Deep red */
-                    rgba(180, 50, 20, 0.85) 100%),   /* Dark reddish */
+                linear-gradient(135deg,
+                    rgba(255, 180, 50, 0.9) 0%,
+                    /* Golden yellow */
+                    rgba(255, 120, 40, 0.85) 25%,
+                    /* Orange-yellow */
+                    rgba(220, 80, 40, 0.9) 50%,
+                    /* Reddish-orange */
+                    rgba(200, 60, 30, 0.9) 75%,
+                    /* Deep red */
+                    rgba(180, 50, 20, 0.85) 100%),
+                /* Dark reddish */
                 /* Surface texture - rough bumpy surface */
                 radial-gradient(circle 1px at 15% 20%, rgba(0, 0, 0, 0.3)),
                 radial-gradient(circle 1px at 35% 15%, rgba(0, 0, 0, 0.25)),
@@ -336,11 +357,9 @@
                 radial-gradient(circle 1px at 85% 65%, rgba(255, 255, 255, 0.12)),
                 radial-gradient(circle 0.5px at 20% 35%, rgba(0, 0, 0, 0.4)),
                 radial-gradient(circle 0.5px at 60% 40%, rgba(0, 0, 0, 0.35));
-            clip-path: polygon(
-                5% 15%, 12% 5%, 25% 8%, 35% 2%, 48% 5%, 60% 8%, 70% 3%, 82% 10%, 90% 18%, 95% 30%,
-                98% 45%, 95% 60%, 92% 72%, 85% 80%, 75% 85%, 60% 88%, 45% 90%, 30% 88%, 15% 85%, 8% 75%,
-                3% 60%, 2% 45%, 4% 30%, 8% 18%
-            );
+            clip-path: polygon(5% 15%, 12% 5%, 25% 8%, 35% 2%, 48% 5%, 60% 8%, 70% 3%, 82% 10%, 90% 18%, 95% 30%,
+                    98% 45%, 95% 60%, 92% 72%, 85% 80%, 75% 85%, 60% 88%, 45% 90%, 30% 88%, 15% 85%, 8% 75%,
+                    3% 60%, 2% 45%, 4% 30%, 8% 18%);
             border: 1px solid rgba(255, 150, 80, 0.8);
         }
 
@@ -350,50 +369,50 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            background: 
+            background:
                 /* Large crater 1 - Deep glowing interior */
                 radial-gradient(ellipse 2.5px 1.8px at 30% 25%, rgba(255, 100, 30, 0.8), rgba(220, 60, 20, 0.6) 50%, transparent 70%),
                 radial-gradient(ellipse 2px 1.5px at 31% 26%, rgba(0, 0, 0, 0.6)),
-                
+
                 /* Large crater 2 - Deep glowing interior */
                 radial-gradient(ellipse 2.2px 1.6px at 60% 35%, rgba(255, 120, 40, 0.75), rgba(200, 70, 30, 0.5) 50%, transparent 70%),
                 radial-gradient(ellipse 1.8px 1.3px at 61% 36%, rgba(0, 0, 0, 0.55)),
-                
+
                 /* Medium crater 1 - Deep interior */
                 radial-gradient(ellipse 1.8px 1.2px at 45% 60%, rgba(220, 80, 40, 0.7), rgba(180, 50, 20, 0.4) 50%, transparent 70%),
                 radial-gradient(circle 1px at 46% 61%, rgba(0, 0, 0, 0.5)),
-                
+
                 /* Large crater 3 - Deep glowing interior */
                 radial-gradient(ellipse 2.3px 1.7px at 70% 70%, rgba(255, 110, 35, 0.8), rgba(210, 60, 25, 0.55) 50%, transparent 70%),
                 radial-gradient(ellipse 2px 1.4px at 71% 71%, rgba(0, 0, 0, 0.6)),
-                
+
                 /* Medium crater 2 - Deep interior */
                 radial-gradient(ellipse 1.8px 1.3px at 20% 70%, rgba(255, 130, 50, 0.75), rgba(200, 80, 35, 0.45) 50%, transparent 70%),
                 radial-gradient(circle 0.8px at 21% 71%, rgba(0, 0, 0, 0.5)),
-                
+
                 /* Small craters group - Deep yellowish-red */
                 radial-gradient(circle 0.8px at 40% 35%, rgba(220, 100, 40, 0.7), rgba(180, 60, 25, 0.4) 50%),
                 radial-gradient(circle 0.7px at 55% 45%, rgba(220, 100, 40, 0.65), rgba(180, 60, 25, 0.35) 50%),
                 radial-gradient(circle 0.8px at 75% 40%, rgba(220, 100, 40, 0.7), rgba(180, 60, 25, 0.4) 50%),
                 radial-gradient(circle 0.7px at 35% 55%, rgba(220, 100, 40, 0.6), rgba(180, 60, 25, 0.3) 50%),
                 radial-gradient(circle 0.8px at 65% 65%, rgba(220, 100, 40, 0.7), rgba(180, 60, 25, 0.4) 50%),
-                
+
                 /* Deep interior glow craters - Yellowish-red */
                 radial-gradient(circle 1.2px at 25% 35%, rgba(255, 150, 60, 0.7), rgba(200, 80, 30, 0.45) 50%),
                 radial-gradient(circle 1.2px at 75% 50%, rgba(255, 130, 50, 0.65), rgba(190, 70, 25, 0.4) 50%),
                 radial-gradient(circle 1px at 55% 55%, rgba(255, 140, 55, 0.6), rgba(200, 75, 28, 0.35) 50%),
-                
+
                 /* Extra deep interior glows - Intense yellowish-red */
                 radial-gradient(circle 1.5px at 48% 32%, rgba(255, 120, 45, 0.75), rgba(210, 70, 25, 0.5) 50%),
                 radial-gradient(circle 1.3px at 38% 68%, rgba(255, 130, 50, 0.7), rgba(200, 75, 28, 0.45) 50%),
                 radial-gradient(circle 1px at 68% 45%, rgba(255, 110, 40, 0.65), rgba(190, 65, 22, 0.4) 50%),
-                
+
                 /* Main highlights - bright spots */
                 radial-gradient(ellipse 3px 2px at 50% 20%, rgba(255, 200, 100, 0.5), rgba(255, 150, 60, 0.2) 70%),
                 radial-gradient(ellipse 2px 1.5px at 35% 40%, rgba(255, 180, 80, 0.45), rgba(255, 130, 50, 0.15) 70%),
                 radial-gradient(ellipse 1.5px 1px at 72% 28%, rgba(255, 190, 90, 0.35), rgba(255, 140, 55, 0.1) 70%),
                 radial-gradient(ellipse 1.2px 0.8px at 25% 50%, rgba(255, 170, 70, 0.3), rgba(255, 120, 45, 0.05) 70%),
-                
+
                 /* Fine detail texture - micro craters with deep colors */
                 radial-gradient(circle 0.5px at 18% 28%, rgba(220, 90, 35, 0.5)),
                 radial-gradient(circle 0.5px at 42% 42%, rgba(220, 90, 35, 0.45)),
@@ -402,11 +421,9 @@
                 radial-gradient(circle 0.5px at 30% 62%, rgba(220, 90, 35, 0.4)),
                 radial-gradient(circle 0.5px at 52% 68%, rgba(220, 90, 35, 0.45)),
                 radial-gradient(circle 0.5px at 15% 75%, rgba(220, 90, 35, 0.4));
-            clip-path: polygon(
-                5% 15%, 12% 5%, 25% 8%, 35% 2%, 48% 5%, 60% 8%, 70% 3%, 82% 10%, 90% 18%, 95% 30%,
-                98% 45%, 95% 60%, 92% 72%, 85% 80%, 75% 85%, 60% 88%, 45% 90%, 30% 88%, 15% 85%, 8% 75%,
-                3% 60%, 2% 45%, 4% 30%, 8% 18%
-            );
+            clip-path: polygon(5% 15%, 12% 5%, 25% 8%, 35% 2%, 48% 5%, 60% 8%, 70% 3%, 82% 10%, 90% 18%, 95% 30%,
+                    98% 45%, 95% 60%, 92% 72%, 85% 80%, 75% 85%, 60% 88%, 45% 90%, 30% 88%, 15% 85%, 8% 75%,
+                    3% 60%, 2% 45%, 4% 30%, 8% 18%);
         }
 
         .asteroid.size-small {
@@ -428,15 +445,19 @@
             0% {
                 transform: translate(-20%, -10%) rotate(0deg) scale(1);
             }
+
             25% {
                 transform: translate(10%, 5%) rotate(90deg) scale(1.05);
             }
+
             50% {
                 transform: translate(20%, 15%) rotate(180deg) scale(1);
             }
+
             75% {
                 transform: translate(5%, 8%) rotate(270deg) scale(1.02);
             }
+
             100% {
                 transform: translate(-20%, -10%) rotate(360deg) scale(1);
             }
@@ -446,24 +467,31 @@
             0% {
                 transform: translate(15%, 20%) rotate(0deg) scale(1);
             }
+
             25% {
                 transform: translate(5%, 15%) rotate(-90deg) scale(1.05);
             }
+
             50% {
                 transform: translate(-10%, 5%) rotate(-180deg) scale(1);
             }
+
             75% {
                 transform: translate(0%, 12%) rotate(-270deg) scale(1.02);
             }
+
             100% {
                 transform: translate(15%, 20%) rotate(-360deg) scale(1);
             }
         }
 
         @keyframes asteroidBobble {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px);
             }
+
             50% {
                 transform: translateY(-3px);
             }
@@ -478,9 +506,12 @@
         }
 
         @keyframes asteroidGlow {
-            0%, 100% {
+
+            0%,
+            100% {
                 filter: drop-shadow(0 0 5px rgba(255, 150, 50, 0.4)) drop-shadow(0 0 10px rgba(220, 80, 40, 0.25));
             }
+
             50% {
                 filter: drop-shadow(0 0 12px rgba(255, 150, 50, 0.6)) drop-shadow(0 0 20px rgba(220, 80, 40, 0.4)) drop-shadow(0 0 30px rgba(200, 60, 30, 0.2));
             }
@@ -2756,7 +2787,7 @@
                             class="tech-tag">JS</span></div>
                 </div>
             </div>
-            <div class="project-card reveal" data-category="ecommerce" style="transition-delay:0.1s">
+            <!-- <div class="project-card reveal" data-category="ecommerce" style="transition-delay:0.1s">
                 <div class="project-image" style="background:linear-gradient(135deg,#7f1d1d,#b91c1c);"><span>🛍️</span>
                 </div>
                 <div class="project-info">
@@ -2768,8 +2799,8 @@
                     <div class="project-tech"><span class="tech-tag">WordPress</span><span
                             class="tech-tag">WooCommerce</span></div>
                 </div>
-            </div>
-            <div class="project-card reveal" data-category="school" style="transition-delay:0.15s">
+            </div> -->
+            <!-- <div class="project-card reveal" data-category="school" style="transition-delay:0.15s">
                 <div class="project-image" style="background:linear-gradient(135deg,#991b1b,#dc2626);"><span>🎓</span>
                 </div>
                 <div class="project-info">
@@ -2780,7 +2811,7 @@
                     <div class="project-tech"><span class="tech-tag">React</span><span class="tech-tag">Tailwind</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="project-card reveal" data-category="brand" style="transition-delay:0.2s">
                 <div class="project-image" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);"><span>✨</span>
                 </div>
@@ -2986,9 +3017,9 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-left">
-            <a href="#" class="footer-logo"><span class="logo-app">App</span><span class="logo-vertex">Vertex</span></a>
+            <a href="#" class="footer-logo"><span class="logo-app">App</span><span class="logo-vertex">VerteX</span></a>
             <div class="footer-divider"></div>
-            <p class="footer-text">© 2025 Built with ❤️ by Leston & Lenstar.</p>
+            <p class="footer-text">© 2026 Built by LESTON & LENSTAR.</p>
         </div>
         <div class="footer-right">
             <a href="#services">Services</a>
@@ -3029,7 +3060,7 @@
         ══════════════════════════════════════════ */
         (function () {
             const container = document.getElementById('spaceContainer');
-            
+
             // Create simple Comets
             function createComet(trailClass) {
                 const comet = document.createElement('div');
