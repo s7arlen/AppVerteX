@@ -24,6 +24,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 exports.contact = functions.https.onRequest(async (req, res) => {
   // CORS Configuration
   const allowedOrigins = [
+    "https://s7arlen.github.io",
     "https://appvertex-e09c8.web.app",
     "https://appvertex-e09c8.firebaseapp.com",
     "https://appvertex.in",
@@ -32,10 +33,12 @@ exports.contact = functions.https.onRequest(async (req, res) => {
   ];
   
   const origin = req.headers.origin;
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.set("Access-Control-Allow-Origin", origin || "*");
+  const isAllowed = origin && allowedOrigins.some(o => origin.startsWith(o));
+  
+  if (isAllowed) {
+    res.set("Access-Control-Allow-Origin", origin);
   } else {
-    res.set("Access-Control-Allow-Origin", "https://appvertex-e09c8.web.app");
+    res.set("Access-Control-Allow-Origin", "https://s7arlen.github.io");
   }
   
   res.set("Access-Control-Allow-Methods", "POST, OPTIONS");

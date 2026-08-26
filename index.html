@@ -33,11 +33,11 @@
         href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Mono:wght@300;400;500&display=swap"
         rel="stylesheet">
     <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <!-- GSAP + Plugins -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="logo.png" type="image/png">
@@ -162,10 +162,10 @@
             height: 100%;
             z-index: 0;
             pointer-events: none;
-            opacity: 0.42;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.38;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.48' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='1'/%3E%3C/svg%3E");
             background-repeat: repeat;
-            background-size: 240px 240px;
+            background-size: 360px 360px;
             mix-blend-mode: multiply;
         }
 
@@ -214,43 +214,38 @@
             position: fixed;
             top: 0;
             left: 0;
-            transform: translate(-50%, -50%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 99999;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            will-change: transform;
+            transition: opacity 0.3s ease, width 0.25s ease, height 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
         }
 
         #cursor {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             background-color: var(--accent);
             z-index: 100000;
-            mix-blend-mode: difference;
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent), 0 0 20px rgba(239, 68, 68, 0.6);
+            transform: translate(-50%, -50%);
         }
 
         #cursor-follower {
-            width: 34px;
-            height: 34px;
-            border: 1px solid rgba(239, 68, 68, 0.4);
+            width: 38px;
+            height: 38px;
+            border: 1.5px solid rgba(239, 68, 68, 0.45);
             z-index: 99999;
-            backdrop-filter: blur(1px);
-            position: fixed;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            border-radius: 50%;
+            backdrop-filter: blur(2px);
+            transform: translate(-50%, -50%);
         }
 
         #cursor-follower.hover {
-            border-color: rgba(239, 68, 68, 0.8);
-            background-color: rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.9);
+            background-color: rgba(239, 68, 68, 0.08);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+            width: 52px;
+            height: 52px;
         }
 
         #socialLinks {
@@ -463,6 +458,27 @@
             inset: 0;
             z-index: 1;
             pointer-events: none;
+        }
+
+        /* ═══════════════ GALAXY CANVAS ═══════════════ */
+        #galaxy-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            width: 100vw !important;
+            height: 100vh !important;
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+
+        #galaxy-canvas.galaxy-ready {
+            opacity: 0.72;
+        }
+
+        html[data-theme="light"] #galaxy-canvas.galaxy-ready {
+            opacity: 0.28;
+            mix-blend-mode: multiply;
         }
 
         body::after {
@@ -873,6 +889,71 @@
             width: 40px;
             height: 1px;
             background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        /* ═══════════════════════════════════════════════════
+           HERO EXTREME CORNER WHATSAPP ICON BUTTON
+           ═══════════════════════════════════════════════════ */
+        .hero-whatsapp-icon-btn {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 10;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #ffffff;
+            font-size: 1.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            opacity: 0;
+            transform: translateY(15px);
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4), 0 0 15px rgba(37, 211, 102, 0.2);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+
+        .hero-whatsapp-icon-btn:hover {
+            transform: translateY(-3px) scale(1.1) !important;
+            box-shadow: 0 14px 35px rgba(37, 211, 102, 0.6), 0 0 28px rgba(37, 211, 102, 0.45);
+        }
+
+        .whatsapp-pulse-ring {
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid rgba(37, 211, 102, 0.65);
+            animation: whatsappPulse 2.2s infinite ease-out;
+            pointer-events: none;
+        }
+
+        .whatsapp-status-dot {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: #25D366;
+            border: 2px solid var(--bg);
+        }
+
+        @keyframes whatsappPulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { opacity: 0.4; }
+            100% { transform: scale(1.45); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hero-whatsapp-icon-btn {
+                bottom: 1.2rem;
+                right: 1.2rem;
+                width: 44px;
+                height: 44px;
+                font-size: 1.45rem;
+            }
         }
 
         /* ═══════════════ MARQUEE ═══════════════ */
@@ -1774,6 +1855,8 @@
     <!-- THREE.JS BACKGROUND CANVAS -->
     <canvas id="three-canvas"></canvas>
     <canvas id="comet-canvas"></canvas>
+    <!-- GALAXY CANVAS (OGL WebGL shader stars) -->
+    <canvas id="galaxy-canvas"></canvas>
 
     <!-- NAVIGATION -->
     <nav id="mainNav">
@@ -1843,6 +1926,13 @@
         <div class="scroll-hint">
             <span class="scroll-hint-line"></span>Scroll to explore
         </div>
+        
+        <!-- Floating WhatsApp Icon Button in Hero Extreme Corner -->
+        <a href="https://wa.me/919322971253?text=Hi%20AppVertex%21%20I%27m%20interested%20in%20building%20a%20project." target="_blank" rel="noopener noreferrer" class="hero-whatsapp-icon-btn reveal" aria-label="Chat on WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+            <span class="whatsapp-pulse-ring"></span>
+            <span class="whatsapp-status-dot"></span>
+        </a>
     </section>
 
     <!-- MARQUEE -->
@@ -2540,10 +2630,17 @@
                 mouseY = -(e.clientY / window.innerHeight - 0.5) * 2;
             });
 
+            let isCanvasVisible = true;
+            const heroObs = new IntersectionObserver(([entry]) => {
+                isCanvasVisible = entry.isIntersecting;
+            }, { threshold: 0.05 });
+            const heroElem = document.getElementById('hero');
+            if (heroElem) heroObs.observe(heroElem);
+
             let t = 0;
             function animate() {
                 requestAnimationFrame(animate);
-                if (document.hidden) return;
+                if (document.hidden || !isCanvasVisible) return;
                 t += 0.01;
                 objects.forEach(o => { o.mesh.rotation.x += o.rx; o.mesh.rotation.y += o.ry; });
                 redLight.position.x = Math.sin(t * 0.5) * 6;
@@ -2563,46 +2660,57 @@
         })();
 
         /* ═══════════════════════════════════════════════════
-           SMOOTH GSAP CURSOR
+           SMOOTH HARDENED CUSTOM CURSOR
            ═══════════════════════════════════════════════════ */
         (function () {
             const cursor = document.getElementById('cursor');
             const follower = document.getElementById('cursor-follower');
-            if (!cursor || !follower || typeof gsap === 'undefined') return;
+            if (!cursor || !follower) return;
 
-            gsap.set([cursor, follower], { opacity: 0, xPercent: -50, yPercent: -50 });
+            const isTouch = window.matchMedia("(max-width: 768px)").matches ||
+                window.matchMedia("(pointer: coarse)").matches;
+            if (isTouch) return;
+
+            let mouseX = -100, mouseY = -100;
+            let followerX = -100, followerY = -100;
+            let initialized = false;
 
             window.addEventListener('mousemove', e => {
-                gsap.to([cursor, follower], { opacity: 1, duration: 0.3, overwrite: 'auto' });
-                gsap.set(cursor, { x: e.clientX, y: e.clientY });
-                gsap.to(follower, {
-                    x: e.clientX,
-                    y: e.clientY,
-                    duration: 0.5,
-                    ease: 'power2.out',
-                    overwrite: 'auto'
-                });
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                if (!initialized) {
+                    initialized = true;
+                    followerX = mouseX;
+                    followerY = mouseY;
+                    cursor.style.opacity = '1';
+                    follower.style.opacity = '1';
+                }
+
+                cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
             });
 
-            window.addEventListener('touchstart', () => {
-                gsap.to([cursor, follower], { opacity: 0, duration: 0.2 });
-            });
+            function render() {
+                if (initialized) {
+                    followerX += (mouseX - followerX) * 0.18;
+                    followerY += (mouseY - followerY) * 0.18;
+                    follower.style.transform = `translate3d(${followerX}px, ${followerY}px, 0) translate(-50%, -50%)`;
+                }
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
 
             document.addEventListener('mouseover', e => {
-                const target = e.target.closest('a, button, .service-card, .project-card, .testimonial-card, .person-card, .filter-btn, .hamburger, .social-icon, .nav-links a');
+                const target = e.target.closest('a, button, .service-card, .project-card, .testimonial-card, .person-card, .filter-btn, .hamburger, .social-icon, .nav-links a, .logo');
                 if (target) {
                     follower.classList.add('hover');
-                    gsap.to(follower, { scale: 1.1, backgroundColor: 'rgba(239,68,68,0.06)', borderColor: 'rgba(239,68,68,0.9)', borderWidth: '2px', duration: 0.5, ease: 'expo.out' });
-                    gsap.to(cursor, { scale: 0.6, opacity: 0.8, duration: 0.4, ease: 'expo.out' });
                 }
             });
 
             document.addEventListener('mouseout', e => {
-                const target = e.target.closest('a, button, .service-card, .project-card, .testimonial-card, .person-card, .filter-btn, .hamburger, .social-icon, .nav-links a');
+                const target = e.target.closest('a, button, .service-card, .project-card, .testimonial-card, .person-card, .filter-btn, .hamburger, .social-icon, .nav-links a, .logo');
                 if (target) {
                     follower.classList.remove('hover');
-                    gsap.to(follower, { scale: 1, backgroundColor: 'transparent', borderColor: 'rgba(239,68,68,0.4)', borderWidth: '1px', duration: 0.5, ease: 'expo.out' });
-                    gsap.to(cursor, { scale: 1, opacity: 1, duration: 0.4, ease: 'expo.out' });
                 }
             });
         })();
@@ -2678,7 +2786,12 @@
            GSAP HERO & SCROLL ANIMATIONS
            ═══════════════════════════════════════════════════ */
         function initHeroAnim() {
-            if (typeof gsap === 'undefined') return;
+            if (typeof gsap === 'undefined') {
+                document.querySelectorAll('.h1-inner, .hero-label, #hero > p, .hero-buttons, .scroll-hint, .hero-whatsapp-icon-btn')
+                    .forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; });
+                document.body.classList.add('intro-done');
+                return;
+            }
             if (typeof ScrollTrigger !== 'undefined') gsap.registerPlugin(ScrollTrigger);
 
             const tl = gsap.timeline({
@@ -2690,7 +2803,8 @@
                 .to('.h1-inner', { y: 0, duration: 1, stagger: 0.12 }, '-=0.4')
                 .to('#hero > p', { opacity: 1, duration: 0.8 }, '-=0.3')
                 .to('.hero-buttons', { opacity: 1, duration: 0.8 }, '-=0.4')
-                .to('.scroll-hint', { opacity: 1, duration: 0.8 }, '-=0.2');
+                .to('.scroll-hint', { opacity: 1, duration: 0.8 }, '-=0.2')
+                .to('.hero-whatsapp-icon-btn', { opacity: 1, y: 0, duration: 0.8 }, '-=0.5');
 
             if (typeof ScrollTrigger !== 'undefined') {
                 ScrollTrigger.create({
@@ -2986,16 +3100,16 @@
         async function syncWithCloud() {
             try {
                 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
-                const { getFirestore, doc, getDoc, getDocs, collection } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+                const { getFirestore, doc, getDoc, getDocs, collection, query, limit } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
                 const { default: firebaseConfig } = await import("./firebase-config.js");
 
                 const app = initializeApp(firebaseConfig);
                 const db = getFirestore(app);
 
-                const testSnap = await getDocs(collection(db, "testimonials"));
+                const testSnap = await getDocs(query(collection(db, "testimonials"), limit(10)));
                 const testimonialsData = testSnap.docs.map(doc => doc.data());
 
-                const projSnap = await getDocs(collection(db, "projects"));
+                const projSnap = await getDocs(query(collection(db, "projects"), limit(12)));
                 const projectsData = projSnap.docs.map(doc => doc.data());
 
                 const footerSnap = await getDoc(doc(db, "settings", "footer"));
@@ -3113,6 +3227,293 @@
             }
         });
     </script>
+
+    <!-- ═══════════════════════════════════════════════════
+         GALAXY — React Bits (OGL WebGL port, vanilla JS)
+         ═══════════════════════════════════════════════════ -->
+    <script type="module">
+        import { Renderer, Program, Mesh, Color, Triangle } from 'https://esm.sh/ogl@1.0.11';
+
+        (function initGalaxy() {
+            const canvas = document.getElementById('galaxy-canvas');
+            if (!canvas) return;
+
+            // ── Shader Source ──────────────────────────────────────────────
+            const vert = `
+attribute vec2 uv;
+attribute vec2 position;
+varying vec2 vUv;
+void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 0, 1);
+}`;
+
+            const frag = `
+precision highp float;
+uniform float uTime;
+uniform vec3 uResolution;
+uniform vec2 uFocal;
+uniform vec2 uRotation;
+uniform float uStarSpeed;
+uniform float uDensity;
+uniform float uHueShift;
+uniform float uSpeed;
+uniform vec2 uMouse;
+uniform float uGlowIntensity;
+uniform float uSaturation;
+uniform bool uMouseRepulsion;
+uniform float uTwinkleIntensity;
+uniform float uRotationSpeed;
+uniform float uRepulsionStrength;
+uniform float uMouseActiveFactor;
+uniform float uAutoCenterRepulsion;
+uniform bool uTransparent;
+varying vec2 vUv;
+
+#define NUM_LAYER 4.0
+#define STAR_COLOR_CUTOFF 0.2
+#define MAT45 mat2(0.7071,-0.7071,0.7071,0.7071)
+#define PERIOD 3.0
+
+float Hash21(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}
+float tri(float x){return abs(fract(x)*2.0-1.0);}
+float tris(float x){float t=fract(x);return 1.0-smoothstep(0.0,1.0,abs(2.0*t-1.0));}
+float trisn(float x){float t=fract(x);return 2.0*(1.0-smoothstep(0.0,1.0,abs(2.0*t-1.0)))-1.0;}
+
+vec3 hsv2rgb(vec3 c){
+    vec4 K=vec4(1.0,2.0/3.0,1.0/3.0,3.0);
+    vec3 p=abs(fract(c.xxx+K.xyz)*6.0-K.www);
+    return c.z*mix(K.xxx,clamp(p-K.xxx,0.0,1.0),c.y);
+}
+
+float Star(vec2 uv,float flare){
+    float d=length(uv);
+    float m=(0.05*uGlowIntensity)/d;
+    float rays=smoothstep(0.0,1.0,1.0-abs(uv.x*uv.y*1000.0));
+    m+=rays*flare*uGlowIntensity;
+    uv*=MAT45;
+    rays=smoothstep(0.0,1.0,1.0-abs(uv.x*uv.y*1000.0));
+    m+=rays*0.3*flare*uGlowIntensity;
+    m*=smoothstep(1.0,0.2,d);
+    return m;
+}
+
+vec3 StarLayer(vec2 uv){
+    vec3 col=vec3(0.0);
+    vec2 gv=fract(uv)-0.5;
+    vec2 id=floor(uv);
+    for(int y=-1;y<=1;y++){
+        for(int x=-1;x<=1;x++){
+            vec2 offset=vec2(float(x),float(y));
+            vec2 si=id+vec2(float(x),float(y));
+            float seed=Hash21(si);
+            float size=fract(seed*345.32);
+            float glossLocal=tri(uStarSpeed/(PERIOD*seed+1.0));
+            float flareSize=smoothstep(0.9,1.0,size)*glossLocal;
+            float red=smoothstep(STAR_COLOR_CUTOFF,1.0,Hash21(si+1.0))+STAR_COLOR_CUTOFF;
+            float blu=smoothstep(STAR_COLOR_CUTOFF,1.0,Hash21(si+3.0))+STAR_COLOR_CUTOFF;
+            float grn=min(red,blu)*seed;
+            vec3 base=vec3(red,grn,blu);
+            float hue=atan(base.g-base.r,base.b-base.r)/(2.0*3.14159)+0.5;
+            hue=fract(hue+uHueShift/360.0);
+            float sat=length(base-vec3(dot(base,vec3(0.299,0.587,0.114))))*uSaturation;
+            float val=max(max(base.r,base.g),base.b);
+            base=hsv2rgb(vec3(hue,sat,val));
+            vec2 pad=vec2(tris(seed*34.0+uTime*uSpeed/10.0),tris(seed*38.0+uTime*uSpeed/30.0))-0.5;
+            float star=Star(gv-offset-pad,flareSize);
+            float twinkle=trisn(uTime*uSpeed+seed*6.2831)*0.5+1.0;
+            twinkle=mix(1.0,twinkle,uTwinkleIntensity);
+            star*=twinkle;
+            col+=star*size*base;
+        }
+    }
+    return col;
+}
+
+void main(){
+    vec2 focalPx=uFocal*uResolution.xy;
+    vec2 uv=(vUv*uResolution.xy-focalPx)/uResolution.y;
+    vec2 mouseNorm=uMouse-vec2(0.5);
+    if(uAutoCenterRepulsion>0.0){
+        vec2 centerUV=vec2(0.0,0.0);
+        float centerDist=length(uv-centerUV);
+        vec2 repulsion=normalize(uv-centerUV)*(uAutoCenterRepulsion/(centerDist+0.1));
+        uv+=repulsion*0.05;
+    } else if(uMouseRepulsion){
+        vec2 mousePosUV=(uMouse*uResolution.xy-focalPx)/uResolution.y;
+        float mouseDist=length(uv-mousePosUV);
+        vec2 repulsion=normalize(uv-mousePosUV)*(uRepulsionStrength/(mouseDist+0.1));
+        uv+=repulsion*0.05*uMouseActiveFactor;
+    } else {
+        vec2 mouseOffset=mouseNorm*0.1*uMouseActiveFactor;
+        uv+=mouseOffset;
+    }
+    float autoRotAngle=uTime*uRotationSpeed;
+    mat2 autoRot=mat2(cos(autoRotAngle),-sin(autoRotAngle),sin(autoRotAngle),cos(autoRotAngle));
+    uv=autoRot*uv;
+    uv=mat2(uRotation.x,-uRotation.y,uRotation.y,uRotation.x)*uv;
+    vec3 col=vec3(0.0);
+    for(float i=0.0;i<1.0;i+=1.0/NUM_LAYER){
+        float depth=fract(i+uStarSpeed*uSpeed);
+        float scale=mix(20.0*uDensity,0.5*uDensity,depth);
+        float fade=depth*smoothstep(1.0,0.9,depth);
+        col+=StarLayer(uv*scale+i*453.32)*fade;
+    }
+    if(uTransparent){
+        float alpha=length(col);
+        alpha=smoothstep(0.0,0.3,alpha);
+        alpha=min(alpha,1.0);
+        gl_FragColor=vec4(col,alpha);
+    } else {
+        gl_FragColor=vec4(col,1.0);
+    }
+}`;
+
+            // ── Per-theme palette configs ──────────────────────────────────
+            const THEMES = {
+                dark: {
+                    hueShift:      355,   // Luxury Crimson & Gold Stardust
+                    saturation:    0.7,
+                    glowIntensity: 0.24,
+                    density:       0.9,
+                    twinkle:       0.25
+                },
+                light: {
+                    // Minimalist Soft Rose Gold & Slate Stardust
+                    // Soft, subtle, non-intrusive micro-particles that complement the crisp light mode
+                    hueShift:      340,
+                    saturation:    0.2,
+                    glowIntensity: 0.14,
+                    density:       0.7,
+                    twinkle:       0.12
+                }
+            };
+
+            function getTheme() {
+                return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';
+            }
+
+            function applyTheme(theme) {
+                const p = THEMES[theme];
+                if (!prog) return;
+                prog.uniforms.uHueShift.value      = p.hueShift;
+                prog.uniforms.uSaturation.value    = p.saturation;
+                prog.uniforms.uGlowIntensity.value = p.glowIntensity;
+                prog.uniforms.uDensity.value       = p.density;
+                prog.uniforms.uTwinkleIntensity.value = p.twinkle;
+            }
+
+            // ── Renderer setup ─────────────────────────────────────────────
+            const renderer = new Renderer({
+                canvas,
+                alpha: true,
+                premultipliedAlpha: false
+            });
+            const gl = renderer.gl;
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+            gl.clearColor(0, 0, 0, 0);
+
+            function resize() {
+                const w = window.innerWidth, h = window.innerHeight;
+                renderer.setSize(w, h);
+                if (prog) {
+                    prog.uniforms.uResolution.value[0] = gl.canvas.width;
+                    prog.uniforms.uResolution.value[1] = gl.canvas.height;
+                    prog.uniforms.uResolution.value[2] = gl.canvas.width / gl.canvas.height;
+                }
+            }
+            window.addEventListener('resize', resize);
+
+            const geo = new Triangle(gl);
+            let prog;
+
+            const initTheme = THEMES[getTheme()];
+            try {
+                prog = new Program(gl, {
+                    vertex: vert,
+                    fragment: frag,
+                    uniforms: {
+                        uTime:               { value: 0 },
+                        uResolution:         { value: new Float32Array([gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height]) },
+                        uFocal:              { value: new Float32Array([0.5, 0.5]) },
+                        uRotation:           { value: new Float32Array([1.0, 0.0]) },
+                        uStarSpeed:          { value: 0.5 },
+                        uDensity:            { value: initTheme.density },
+                        uHueShift:           { value: initTheme.hueShift },
+                        uSpeed:              { value: 1.0 },
+                        uMouse:              { value: new Float32Array([0.5, 0.5]) },
+                        uGlowIntensity:      { value: initTheme.glowIntensity },
+                        uSaturation:         { value: initTheme.saturation },
+                        uMouseRepulsion:     { value: true },
+                        uTwinkleIntensity:   { value: initTheme.twinkle },
+                        uRotationSpeed:      { value: 0.04 },
+                        uRepulsionStrength:  { value: 2.0 },
+                        uMouseActiveFactor:  { value: 0.0 },
+                        uAutoCenterRepulsion:{ value: 0 },
+                        uTransparent:        { value: true }
+                    }
+                });
+            } catch (e) {
+                console.warn('Galaxy shader compile error:', e);
+                return;
+            }
+
+            const mesh = new Mesh(gl, { geometry: geo, program: prog });
+
+            // ── Live theme switching via MutationObserver ───────────────────
+            new MutationObserver(() => applyTheme(getTheme()))
+                .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+            // ── Mouse tracking ──────────────────────────────────────────────
+            const targetMouse  = { x: 0.5, y: 0.5 };
+            const smoothMouse  = { x: 0.5, y: 0.5 };
+            let   targetActive = 0.0;
+            let   smoothActive = 0.0;
+
+            window.addEventListener('mousemove', e => {
+                targetMouse.x = e.clientX / window.innerWidth;
+                targetMouse.y = 1.0 - e.clientY / window.innerHeight;
+                targetActive  = 1.0;
+            });
+            window.addEventListener('mouseleave', () => { targetActive = 0.0; });
+
+            // ── Visibility guard ────────────────────────────────────────────
+            let isVisible = true;
+            const obs = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0.01 });
+            const heroEl = document.getElementById('hero');
+            if (heroEl) obs.observe(heroEl);
+
+            // ── Render loop ─────────────────────────────────────────────────
+            const LERP = 0.05;
+            function tick(t) {
+                requestAnimationFrame(tick);
+                if (document.hidden || !isVisible) return;
+
+                const ts = t * 0.001;
+                prog.uniforms.uTime.value      = ts;
+                prog.uniforms.uStarSpeed.value = (ts * 0.5) / 10.0;
+
+                smoothMouse.x  += (targetMouse.x - smoothMouse.x) * LERP;
+                smoothMouse.y  += (targetMouse.y - smoothMouse.y) * LERP;
+                smoothActive   += (targetActive  - smoothActive)  * LERP;
+
+                prog.uniforms.uMouse.value[0]          = smoothMouse.x;
+                prog.uniforms.uMouse.value[1]          = smoothMouse.y;
+                prog.uniforms.uMouseActiveFactor.value = smoothActive;
+
+                renderer.render({ scene: mesh });
+            }
+            requestAnimationFrame(tick);
+            resize();
+
+            // Fade canvas in after first frame
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => { canvas.classList.add('galaxy-ready'); });
+            });
+        })();
+    </script>
+
 </body>
 
 </html>

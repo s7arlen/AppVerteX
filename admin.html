@@ -600,7 +600,10 @@
                 await uploadString(storageRef, base64Data, 'data_url');
                 return await getDownloadURL(storageRef);
             } catch (err) {
-                console.warn("Firebase Storage upload failed, fallback to optimized data URL:", err);
+                console.warn("Firebase Storage upload failed:", err);
+                if (base64Data.length > 300000) {
+                    throw new Error("Image exceeds 300KB limit for inline storage. Please ensure Firebase Storage is enabled.");
+                }
                 return base64Data;
             }
         }
