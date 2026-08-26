@@ -1851,6 +1851,15 @@
             <div class="loader-logo" id="loaderLogo" data-text="AppVertex"><span class="r">App</span>Vertex</div>
         </div>
     </div>
+    <script>
+        setTimeout(function () {
+            var ldr = document.getElementById('loader');
+            if (ldr && getComputedStyle(ldr).display !== 'none') {
+                ldr.style.opacity = '0';
+                setTimeout(function () { ldr.style.display = 'none'; }, 400);
+            }
+        }, 2200);
+    </script>
 
     <!-- THREE.JS BACKGROUND CANVAS -->
     <canvas id="three-canvas"></canvas>
