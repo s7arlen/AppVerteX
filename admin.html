@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>AppVerteX Admin Panel</title>
+    <title>AppVertex Admin Panel</title>
     <link rel="icon" href="logo.png" type="image/png">
     <link rel="shortcut icon" href="logo.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -683,44 +683,71 @@
             document.getElementById('statYear').textContent = footerYear;
         }
 
+        const escapeHTML = (str) => String(str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+        const safeImageSrc = (url) => {
+            if (!url || typeof url !== 'string') return '';
+            const clean = url.trim();
+            if (clean.startsWith('https://') || clean.startsWith('http://') || clean.startsWith('data:image/')) return clean;
+            return '';
+        };
+
         function renderTestimonials() {
             const list = document.getElementById('testimonialsList');
             list.innerHTML = testimonials.map(t => `
                 <div class="list-item">
-                    ${t.image ? `<img src="${t.image}" class="item-image avatar">` : `<div class="item-image avatar" style="background:var(--primary); display:flex; align-items:center; justify-content:center; color:white;">${t.initials}</div>`}
-                    <div class="item-content"><strong>${t.name}</strong><br><small>${t.role}</small></div>
+                    ${safeImageSrc(t.image) ? `<img src="${safeImageSrc(t.image)}" class="item-image avatar" alt="${escapeHTML(t.name)}">` : `<div class="item-image avatar" style="background:var(--primary); display:flex; align-items:center; justify-content:center; color:white;">${escapeHTML(t.initials || 'AV')}</div>`}
+                    <div class="item-content"><strong>${escapeHTML(t.name)}</strong><br><small>${escapeHTML(t.role)}</small></div>
                     <div class="item-actions">
-                        <button class="btn-icon" onclick='openTestimonialModal(${JSON.stringify(t).replace(/'/g,"&#39;")})'><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon" onclick="editTestimonialById('${t.id}')"><i class="fas fa-edit"></i></button>
                         <button class="btn-icon" onclick="deleteTestimonial('${t.id}')" style="color:#ef4444;"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
+        function editTestimonialById(id) {
+            const t = testimonials.find(item => item.id === id);
+            openTestimonialModal(t);
+        }
+
         function renderProjects() {
             const list = document.getElementById('projectsList');
             list.innerHTML = projects.map(p => `
                 <div class="list-item">
-                    ${p.image ? `<img src="${p.image}" class="item-image">` : `<div class="item-image" style="background:#333; display:flex; align-items:center; justify-content:center;">${p.emoji || '🚀'}</div>`}
-                    <div class="item-content"><strong>${p.name}</strong><br><small>${p.category}</small></div>
+                    ${safeImageSrc(p.image) ? `<img src="${safeImageSrc(p.image)}" class="item-image" alt="${escapeHTML(p.name)}">` : `<div class="item-image" style="background:#333; display:flex; align-items:center; justify-content:center;">${escapeHTML(p.emoji || '🚀')}</div>`}
+                    <div class="item-content"><strong>${escapeHTML(p.name)}</strong><br><small>${escapeHTML(p.category)}</small></div>
                     <div class="item-actions">
-                        <button class="btn-icon" onclick='openProjectModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon" onclick="editProjectById('${p.id}')"><i class="fas fa-edit"></i></button>
                         <button class="btn-icon" onclick="deleteProject('${p.id}')" style="color:#ef4444;"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
         }
 
+        function editProjectById(id) {
+            const p = projects.find(item => item.id === id);
+            openProjectModal(p);
+        }
+
         // Modal Handlers
         function openTestimonialModal(t = null) {
+            currentTestimonialImage = "";
+            document.getElementById('testimonialId').value = "";
+            document.getElementById('testimonialName').value = "";
+            document.getElementById('testimonialRole').value = "";
+            document.getElementById('testimonialText').value = "";
+            document.getElementById('testimonialPreview').style.display = 'none';
+            document.getElementById('testimonialPlaceholder').style.display = 'flex';
+
             if (t) {
-                document.getElementById('testimonialId').value = t.id;
-                document.getElementById('testimonialName').value = t.name;
-                document.getElementById('testimonialRole').value = t.role;
-                document.getElementById('testimonialText').value = t.text;
-                if (t.image) {
+                document.getElementById('testimonialId').value = t.id || '';
+                document.getElementById('testimonialName').value = t.name || '';
+                document.getElementById('testimonialRole').value = t.role || '';
+                document.getElementById('testimonialText').value = t.text || '';
+                if (safeImageSrc(t.image)) {
                     currentTestimonialImage = t.image;
-                    document.getElementById('testimonialPreview').src = t.image;
+                    document.getElementById('testimonialPreview').src = safeImageSrc(t.image);
                     document.getElementById('testimonialPreview').style.display = 'block';
                     document.getElementById('testimonialPlaceholder').style.display = 'none';
                 }
@@ -728,54 +755,30 @@
             document.getElementById('testimonialModal').classList.add('active');
         }
 
-        async function saveTestimonial() {
-            if (!auth.currentUser) return showToast("Must be logged in", "error");
-            const id = document.getElementById('testimonialId').value || Date.now().toString();
-            const nameField = document.getElementById('testimonialName');
-            const name = nameField.value.trim();
-            
-            if (!name) return showToast("Name is required", "error");
-
-            showToast("Saving...", "info");
-            const imageUrl = await uploadImageToStorage(currentTestimonialImage, `testimonials/${id}`);
-
-            const data = {
-                id, name,
-                role: document.getElementById('testimonialRole').value,
-                rating: parseInt(document.getElementById('testimonialRating').value) || 5,
-                text: document.getElementById('testimonialText').value,
-                image: imageUrl,
-                initials: name.split(' ').map(n=>n[0]).filter(i=>i).join('').toUpperCase()
-            };
-
-            try {
-                await setDoc(doc(db, "testimonials", id), data);
-                showToast("Testimonial saved!");
-                closeModal('testimonialModal');
-                loadDataFromCloud();
-            } catch (e) {
-                console.error("Save error:", e);
-                showToast("Error saving: " + e.message, "error");
-            }
-        }
-
         function openProjectModal(p = null) {
+            currentProjectImage = "";
+            document.getElementById('projectId').value = "";
+            document.getElementById('projectName').value = "";
+            document.getElementById('projectYear').value = "2026";
+            document.getElementById('projectDesc').value = "";
+            document.getElementById('projectTech').value = "";
+            document.getElementById('projectLink').value = "";
+            document.getElementById('projectPreview').style.display = 'none';
+            document.getElementById('projectPlaceholder').style.display = 'flex';
+
             if (p) {
-                document.getElementById('projectId').value = p.id;
-                document.getElementById('projectName').value = p.name;
-                document.getElementById('projectYear').value = p.year;
-                document.getElementById('projectDesc').value = p.description;
+                document.getElementById('projectId').value = p.id || '';
+                document.getElementById('projectName').value = p.name || '';
+                document.getElementById('projectYear').value = p.year || 2026;
+                document.getElementById('projectDesc').value = p.description || '';
                 document.getElementById('projectTech').value = (p.technologies || []).join(', ');
                 document.getElementById('projectLink').value = p.link || '';
-                if (p.image) {
+                if (safeImageSrc(p.image)) {
                     currentProjectImage = p.image;
-                    document.getElementById('projectPreview').src = p.image;
+                    document.getElementById('projectPreview').src = safeImageSrc(p.image);
                     document.getElementById('projectPreview').style.display = 'block';
                     document.getElementById('projectPlaceholder').style.display = 'none';
                 }
-            } else {
-                const id = document.getElementById('projectId');
-                if (id) id.value = '';
             }
             document.getElementById('projectModal').classList.add('active');
         }

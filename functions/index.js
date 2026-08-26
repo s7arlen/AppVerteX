@@ -89,7 +89,7 @@ exports.contact = functions.https.onRequest(async (req, res) => {
 
   const runtimeConfig = functions.config() || {};
   const RESEND_API_KEY = (runtimeConfig.resend && runtimeConfig.resend.key) || process.env.RESEND_API_KEY;
-  const CONTACT_RECEIVER = (runtimeConfig.contact && runtimeConfig.contact.receiver) || "info@appvertex.in";
+  const CONTACT_RECEIVER = (runtimeConfig.contact && runtimeConfig.contact.receiver) || "leston@appvertex.in";
 
   if (!RESEND_API_KEY) {
     console.error("Missing RESEND_API_KEY in functions config");
@@ -106,7 +106,7 @@ exports.contact = functions.https.onRequest(async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "AppVerteX <info@appvertex.in>",
+        from: "AppVertex <info@appvertex.in>",
         to: [CONTACT_RECEIVER],
         subject: `New message from ${safeName}`,
         html: `
@@ -125,14 +125,14 @@ exports.contact = functions.https.onRequest(async (req, res) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "AppVerteX <info@appvertex.in>",
+        from: "AppVertex <info@appvertex.in>",
         to: [rawEmail],
         subject: `Thanks for reaching out, ${safeName}!`,
         html: `
           <p>Hi ${safeName},</p>
           <p>Thanks for contacting us! We've received your message and will get back to you shortly.</p>
           <br/>
-          <p>— The AppVerteX Team</p>
+          <p>— The AppVertex Team</p>
         `,
       }),
     });

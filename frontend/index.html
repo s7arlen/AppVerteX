@@ -2405,12 +2405,9 @@
     </footer>
 
     <script>
-        /* API Endpoint Resolver for Localhost vs Production */
+        /* API Endpoint Resolver for Localhost vs GitHub Pages vs Custom Domain */
         const getApiEndpoint = () => {
-            const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
-            return isLocalhost
-                ? 'https://us-central1-appvertex-e09c8.cloudfunctions.net/contact'
-                : '/api/contact';
+            return 'https://us-central1-appvertex-e09c8.cloudfunctions.net/contact';
         };
 
         /* ═══════════════════════════════════════════════════
