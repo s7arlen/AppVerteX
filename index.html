@@ -529,37 +529,92 @@
             z-index: 220;
         }
 
-        .theme-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            padding: 0.72rem 1rem;
-            border: 1px solid var(--border);
+        .theme-slider-track {
+            position: relative;
+            width: 58px;
+            height: 30px;
+            padding: 3px;
             border-radius: 999px;
-            background: var(--theme-switch-bg);
-            color: var(--text);
-            backdrop-filter: blur(18px);
-            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--border);
+            background: var(--surface2-base);
+            backdrop-filter: blur(16px);
             cursor: none;
-            transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            outline: none;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .theme-toggle:hover {
-            transform: translateY(-1px);
+        html[data-theme="light"] .theme-slider-track {
+            background: rgba(226, 232, 240, 0.85);
+            border-color: rgba(203, 213, 225, 0.9);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .theme-slider-track:hover {
             border-color: var(--accent);
         }
 
-        .theme-toggle-emoji {
-            font-size: 1rem;
-            line-height: 1;
+        .theme-slider-icon {
+            position: relative;
+            z-index: 2;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0.4;
+            pointer-events: none;
         }
 
-        .theme-toggle-label {
-            font-family: var(--mono);
-            font-size: 0.64rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            white-space: nowrap;
+        .theme-slider-icon svg {
+            display: block;
+            width: 13px;
+            height: 13px;
+        }
+
+        /* Active state icon styling */
+        html[data-theme="light"] .icon-sun {
+            color: #f97316;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        html[data-theme="dark"] .icon-moon {
+            color: #ffffff;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        /* Sliding thumb knob */
+        .theme-slider-thumb {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+            transition: transform 0.36s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease, box-shadow 0.3s ease;
+            pointer-events: none;
+        }
+
+        html[data-theme="dark"] .theme-slider-thumb {
+            transform: translateX(28px);
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        html[data-theme="light"] .theme-slider-thumb {
+            transform: translateX(0px);
+            background: #ffffff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 0 8px rgba(249, 115, 22, 0.3);
         }
 
         .logo::after {
@@ -1730,9 +1785,26 @@
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
             <div class="theme-switcher">
-                <button class="theme-toggle" id="themeToggle" type="button" aria-live="polite" aria-label="Switch theme">
-                    <span class="theme-toggle-emoji" aria-hidden="true">🌙</span>
-                    <span class="theme-toggle-label">Dark</span>
+                <button class="theme-slider-track" id="themeToggle" type="button" aria-label="Toggle color theme" role="switch" aria-checked="false">
+                    <span class="theme-slider-icon icon-sun" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </span>
+                    <span class="theme-slider-icon icon-moon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    </span>
+                    <span class="theme-slider-thumb"></span>
                 </button>
             </div>
             <a href="#contact" class="cta-button"><span>Get a Quote</span></a>
@@ -2738,22 +2810,18 @@
         })();
 
         /* ═══════════════════════════════════════════════════
-           THEME SWITCHER
+           THEME SWITCHER (DUAL-ICON SLIDER TRACK)
            ═══════════════════════════════════════════════════ */
         (function () {
             const STORAGE_KEY = 'appvertex-theme';
             const root = document.documentElement;
             const toggle = document.getElementById('themeToggle');
             if (!toggle) return;
-            const emoji = toggle.querySelector('.theme-toggle-emoji');
-            const label = toggle.querySelector('.theme-toggle-label');
 
             const applyTheme = (theme, persist = true) => {
                 const nextTheme = theme === 'light' ? 'light' : 'dark';
                 root.dataset.theme = nextTheme;
-                if (emoji) emoji.textContent = nextTheme === 'dark' ? '🌙' : '☀️';
-                if (label) label.textContent = nextTheme === 'dark' ? 'Dark' : 'Light';
-                toggle.setAttribute('aria-pressed', nextTheme === 'dark' ? 'true' : 'false');
+                toggle.setAttribute('aria-checked', nextTheme === 'dark' ? 'true' : 'false');
                 if (persist) {
                     try { localStorage.setItem(STORAGE_KEY, nextTheme); } catch (e) {}
                 }
