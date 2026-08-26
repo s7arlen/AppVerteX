@@ -1700,7 +1700,8 @@
             #cursor, #cursor-follower { display: none !important; }
             nav { padding: 1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; z-index: 3001; }
             .logo { font-size: 1.3rem; white-space: nowrap; }
-            .theme-switcher { margin-right: 0.5rem; }
+            .theme-switcher { margin-right: 0.4rem; display: flex; align-items: center; }
+            .theme-slider-track { height: 30px !important; min-height: 30px !important; max-height: 30px !important; width: 56px !important; padding: 3px !important; cursor: pointer !important; }
             .nav-links { display: none; }
             .cta-button { display: none; }
             .hamburger { display: flex; align-items: center; position: static; z-index: 3001; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; }
@@ -1727,7 +1728,7 @@
             .process-step { grid-template-columns: 70px 1fr; gap: 1.5rem; }
             .service-card { padding: 1.5rem; }
             .form-group input, .form-group textarea, .form-group select { min-height: 44px; font-size: 16px; }
-            button, a.cta-button, .btn-primary { min-height: 44px; }
+            button:not(.theme-slider-track), a.cta-button, .btn-primary { min-height: 44px; }
         }
 
         @media (max-width: 480px) {
@@ -1736,10 +1737,9 @@
             #hero h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); line-height: 1.08; margin-bottom: 1.5rem; }
             #hero>p { font-size: 0.78rem; line-height: 1.7; margin-bottom: 2rem; }
             nav { padding: 0.8rem 1rem; display: flex; align-items: center; justify-content: space-between; }
-            .theme-switcher { margin-right: 0.3rem; }
-            .theme-toggle { padding: 0.7rem 0.9rem; }
-            .logo { font-size: 1.4rem; }
-            .hamburger { display: flex; align-items: center; position: static; padding: 0.4rem; font-size: 1.3rem; }
+            .theme-switcher { margin-right: 0.2rem; }
+            .logo { font-size: 1.3rem; }
+            .hamburger { display: flex; align-items: center; position: static; padding: 0.4rem; font-size: 1.2rem; }
             .hero-buttons { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 1rem; }
             .btn-primary { padding: 0.9rem 2rem; font-size: 0.7rem; width: 100%; text-align: center; }
             .scroll-hint { margin-top: 3rem; position: relative; bottom: auto; left: auto; }
