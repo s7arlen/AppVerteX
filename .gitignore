@@ -1,0 +1,25 @@
+# Dependencies — never commit these
+node_modules/
+backend/node_modules/
+*/node_modules/
+
+# Environment variables — NEVER commit
+.env
+backend/.env
+*/.env
+
+# OS junk
+.DS_Store
+**/.DS_Store
+__MACOSX/
+*.tmp
+*.tmp.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+.gemini/

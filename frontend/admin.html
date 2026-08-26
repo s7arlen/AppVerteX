@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AppVerteX Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ef4444;
+            --primary-dark: #dc2626;
+            --bg-dark: #080c10;
+            --bg-card: #141922;
+            --border: #1e2535;
+            --text: #f0f4fa;
+            --text-muted: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ───────────────────────────────────────────
+           LOGIN SCREEN
+        ─────────────────────────────────────────── */
+        #loginScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg-dark);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #loginScreen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(239,68,68,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(239,68,68,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        #loginScreen::after {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(239,68,68,0.08) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            animation: loginCardIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes loginCardIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .login-logo {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-logo span { color: var(--primary); }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .login-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.2);
+            color: var(--primary);
+            font-size: 0.75rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 99px;
+            width: fit-content;
+            margin: 0 auto 2rem;
+        }
+
+        .login-form .form-group { margin-bottom: 1.25rem; }
+
+        .login-input-wrap { position: relative; }
+        .login-input-wrap i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 0.85rem 1rem 0.85rem 2.75rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+        }
+
+        .login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .login-btn:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .login-error {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.3);
+            color: #fca5a5;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .login-error.show { display: flex; }
+
+        /* ───────────────────────────────────────────
+           ADMIN PANEL
+        ─────────────────────────────────────────── */
+        #adminPanel { display: none; }
+        #adminPanel.visible { display: block; }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-family: 'DM Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span { color: var(--primary); }
+
+        .nav-section { margin-bottom: 2rem; }
+        .nav-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--text);
+        }
+
+        .nav-item.active { border-left: 3px solid var(--primary); }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .admin-user-info {
+            display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+        }
+
+        .admin-avatar {
+            width: 36px; height: 36px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700; color: white;
+        }
+
+        .admin-user-email {
+            font-size: 0.75rem; color: var(--text-muted);
+            max-width: 140px; overflow: hidden; text-overflow: ellipsis;
+        }
+
+        .logout-btn {
+            width: 100%; border: 1px solid var(--border); border-radius: 8px;
+            padding: 0.65rem; background: transparent; color: var(--text-muted);
+            cursor: pointer; font-size: 0.85rem; display: flex; align-items: center;
+            justify-content: center; gap: 0.5rem;
+        }
+
+        .logout-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+        .main-content { flex: 1; margin-left: 260px; padding: 2rem 3rem; }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border);
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem; border-radius: 6px; border: none; cursor: pointer;
+            transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: inherit; font-size: 0.85rem;
+        }
+
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem;
+        }
+
+        .stat-value { font-size: 2rem; font-weight: 700; color: var(--primary); }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); }
+
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+        }
+
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .form-input, .form-textarea, .form-select {
+            width: 100%; padding: 0.75rem 1rem; background: var(--bg-dark);
+            border: 1px solid var(--border); border-radius: 8px; color: var(--text);
+            font-family: inherit;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .image-upload {
+            border: 2px dashed var(--border); border-radius: 12px; padding: 2rem;
+            text-align: center; cursor: pointer; position: relative;
+        }
+
+        .image-upload.has-image { border-style: solid; border-color: var(--primary); }
+        .image-upload input { position: absolute; inset: 0; opacity: 0; }
+        .upload-preview { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; }
+        .upload-preview.avatar { width: 120px; height: 120px; border-radius: 50%; margin: 0 auto; }
+
+        .item-list { display: flex; flex-direction: column; gap: 1rem; }
+        .list-item {
+            background: var(--bg-dark); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.25rem; display: flex; gap: 1rem; align-items: center;
+        }
+
+        .item-image { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
+        .item-image.avatar { border-radius: 50%; }
+        .item-content { flex: 1; }
+        .item-actions { display: flex; gap: 0.5rem; }
+        .btn-icon {
+            width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+            background: transparent; color: var(--text); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+            z-index: 1000; display: none; align-items: center; justify-content: center; padding: 2rem;
+        }
+
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto;
+        }
+
+        .modal-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer { padding: 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 1rem; }
+
+        .toast-container { position: fixed; top: 2rem; right: 2rem; z-index: 2000; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast {
+            background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--primary);
+            border-radius: 8px; padding: 1rem 1.5rem; min-width: 300px;
+            animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 0.75rem;
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .section-content { display: none; }
+        .section-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .code-preview {
+            background: var(--bg-dark); border: 1px solid var(--border); border-radius: 8px;
+            padding: 1rem; font-family: 'DM Mono', monospace; font-size: 0.8rem;
+            max-height: 400px; overflow-y: auto; white-space: pre-wrap; color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <div class="login-logo"><span>App</span>VerteX</div>
+            <p class="login-subtitle">Admin Panel</p>
+            <div class="login-badge"><i class="fas fa-lock"></i> Secure Access</div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <div class="login-input-wrap"><i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="admin@example.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="login-input-wrap"><i class="fas fa-key"></i>
+                        <input type="password" id="loginPassword" placeholder="••••••••">
+                    </div>
+                </div>
+                <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+                <div class="login-error" id="loginError"><i class="fas fa-exclamation-circle"></i> <span id="loginErrorMsg"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel">
+        <div class="admin-container">
+            <aside class="sidebar">
+                <div class="logo"><span>App</span>VerteX</div>
+                <div class="nav-section">
+                    <div class="nav-title">Website</div>
+                    <a href="index.html" class="nav-item"><i class="fas fa-external-link-alt"></i> View Site</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">Dashboard</div>
+                    <a class="nav-item active" onclick="showSection('dashboard')"><i class="fas fa-home"></i> Overview</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">Content</div>
+                    <a class="nav-item" onclick="showSection('testimonials')"><i class="fas fa-quote-left"></i> Testimonials</a>
+                    <a class="nav-item" onclick="showSection('projects')"><i class="fas fa-briefcase"></i> Projects</a>
+                    <a class="nav-item" onclick="showSection('footer')"><i class="fas fa-shoe-prints"></i> Footer</a>
+                </div>
+                <div class="nav-section">
+                    <div class="nav-title">Settings</div>
+                    <a class="nav-item" onclick="showSection('export')"><i class="fas fa-download"></i> Export Code</a>
+                </div>
+                <div class="sidebar-footer">
+                    <div class="admin-user-info">
+                        <div class="admin-avatar" id="adminAvatar">A</div>
+                        <div>
+                            <div style="font-size:0.8rem; font-weight:600;">Admin</div>
+                            <div class="admin-user-email" id="adminEmail">loading...</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <div id="dashboard" class="section-content active">
+                    <div class="header"><h1>Dashboard</h1></div>
+                    <div class="stats-grid">
+                        <div class="stat-card"><div class="stat-value" id="statTestimonials">0</div><div class="stat-label">Testimonials</div></div>
+                        <div class="stat-card"><div class="stat-value" id="statProjects">0</div><div class="stat-label">Projects</div></div>
+                        <div class="stat-card"><div class="stat-value" id="statYear">2026</div><div class="stat-label">Footer Year</div></div>
+                    </div>
+                    <div class="card">
+                        <h3>Migration & Sync</h3>
+                        <p style="color:var(--text-muted); margin: 10px 0;">If you have previous data in this browser, click below to upload it to Firebase.</p>
+                        <button class="btn btn-primary" onclick="importLocalData()"><i class="fas fa-cloud-upload-alt"></i> Import Local Data</button>
+                    </div>
+                </div>
+
+                <div id="testimonials" class="section-content">
+                    <div class="header"><h1>Testimonials</h1><button class="btn btn-primary" onclick="openTestimonialModal()">+ Add</button></div>
+                    <div id="testimonialsList" class="item-list"></div>
+                </div>
+
+                <div id="projects" class="section-content">
+                    <div class="header"><h1>Projects</h1><button class="btn btn-primary" onclick="openProjectModal()">+ Add</button></div>
+                    <div id="projectsList" class="item-list"></div>
+                </div>
+
+                <div id="footer" class="section-content">
+                    <div class="header"><h1>Footer</h1></div>
+                    <div class="card">
+                        <label class="form-label">Copyright Year</label>
+                        <input type="number" class="form-input" id="footerYear" value="2026">
+                        <button class="btn btn-primary" style="margin-top:1rem" onclick="saveFooter()">Save</button>
+                    </div>
+                </div>
+
+                <div id="export" class="section-content">
+                    <div class="header"><h1>Export</h1></div>
+                    <div class="card">
+                        <button class="btn btn-primary" onclick="generateCode()">Generate index.html</button>
+                        <div id="codeOutput" class="code-preview" style="margin-top:1rem">Click generate...</div>
+                        <div style="margin-top:1rem; display:flex; gap:1rem;">
+                            <button class="btn btn-secondary" onclick="copyCode()">Copy</button>
+                            <button class="btn btn-primary" onclick="downloadCode()">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MODALS (Testimonial & Project) -->
+    <div class="modal-overlay" id="testimonialModal">
+        <div class="modal">
+            <div class="modal-header"><h3 id="testimonialModalTitle">Testimonial</h3><button class="btn" onclick="closeModal('testimonialModal')">&times;</button></div>
+            <div class="modal-body">
+                <input type="hidden" id="testimonialId">
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="testimonialName"></div>
+                    <div class="form-group"><label class="form-label">Role</label><input type="text" class="form-input" id="testimonialRole"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Rating</label><select class="form-select" id="testimonialRating"><option value="5">5 Stars</option><option value="4">4 Stars</option></select></div>
+                <div class="form-group"><label class="form-label">Text</label><textarea class="form-textarea" id="testimonialText"></textarea></div>
+                <div class="image-upload" id="testimonialImageUpload">
+                    <input type="file" id="testimonialImage" accept="image/*" onchange="handleImageUpload(this, 'testimonial')">
+                    <div id="testimonialPlaceholder"><i class="fas fa-camera"></i><p>Upload Photo</p></div>
+                    <img id="testimonialPreview" class="upload-preview avatar" style="display:none">
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('testimonialModal')">Cancel</button><button class="btn btn-primary" onclick="saveTestimonial()">Save</button></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal">
+            <div class="modal-header"><h3>Project</h3><button class="btn" onclick="closeModal('projectModal')">&times;</button></div>
+            <div class="modal-body">
+                <input type="hidden" id="projectId">
+                <div class="form-group"><label class="form-label">Name</label><input type="text" class="form-input" id="projectName"></div>
+                <div class="form-row">
+                    <div class="form-group"><label class="form-label">Category</label><select class="form-select" id="projectCategory"><option value="startup">Startup</option><option value="ecommerce">E-Commerce</option><option value="school">School</option><option value="brand">Brand</option></select></div>
+                    <div class="form-group"><label class="form-label">Year</label><input type="number" class="form-input" id="projectYear"></div>
+                </div>
+                <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="projectDesc"></textarea></div>
+                <div class="form-group"><label class="form-label">Tech (comma separated)</label><input type="text" class="form-input" id="projectTech"></div>
+                <div class="form-group"><label class="form-label">Live Link (Optional)</label><input type="url" class="form-input" id="projectLink" placeholder="https://example.com"></div>
+                <div class="image-upload" id="projectImageUpload">
+                    <input type="file" id="projectImage" accept="image/*" onchange="handleImageUpload(this, 'project')">
+                    <div id="projectPlaceholder"><i class="fas fa-image"></i><p>Upload Screenshot</p></div>
+                    <img id="projectPreview" class="upload-preview" style="display:none">
+                </div>
+            </div>
+            <div class="modal-footer"><button class="btn btn-secondary" onclick="closeModal('projectModal')">Cancel</button><button class="btn btn-primary" onclick="saveProject()">Save</button></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, getDocs, getDoc, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getStorage, ref, uploadString, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        import firebaseConfig from "./firebase-config.js";
+
+        // Init
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+
+        // State
+        let testimonials = [];
+        let projects = [];
+        let footerYear = "2026";
+        let currentTestimonialImage = null;
+        let currentProjectImage = null;
+
+        // Auth Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').classList.add('visible');
+                document.getElementById('adminEmail').textContent = user.email;
+                document.getElementById('adminAvatar').textContent = user.email[0].toUpperCase();
+                loadDataFromCloud();
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('adminPanel').classList.remove('visible');
+            }
+        });
+
+        // Helper to upload image to Firebase Storage if data URL
+        async function uploadImageToStorage(base64Data, path) {
+            if (!base64Data || !base64Data.startsWith('data:image')) return base64Data;
+            try {
+                const storageRef = ref(storage, path);
+                await uploadString(storageRef, base64Data, 'data_url');
+                return await getDownloadURL(storageRef);
+            } catch (err) {
+                console.warn("Firebase Storage upload failed, fallback to optimized data URL:", err);
+                return base64Data;
+            }
+        }
+
+        // Auth Actions
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const pass = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const err = document.getElementById('loginError');
+            const errMsg = document.getElementById('loginErrorMsg');
+            
+            btn.disabled = true; btn.textContent = "Checking...";
+            err.classList.remove('show');
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } catch (e) {
+                console.error("Login Error:", e);
+                btn.disabled = false; btn.textContent = "Sign In";
+                err.classList.add('show');
+                
+                if (e.code === 'auth/invalid-credential') {
+                    errMsg.textContent = "Invalid email or password.";
+                } else if (e.code === 'auth/operation-not-allowed') {
+                    errMsg.textContent = "Email login is disabled in Firebase Console.";
+                } else {
+                    errMsg.textContent = e.message;
+                }
+            }
+        }
+
+        async function handleLogout() {
+            await signOut(auth);
+        }
+
+        // Data Actions
+        async function loadDataFromCloud() {
+            try {
+                const tSnap = await getDocs(collection(db, "testimonials"));
+                testimonials = tSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                const pSnap = await getDocs(collection(db, "projects"));
+                projects = pSnap.docs.map(d => ({id: d.id, ...d.data()}));
+                const fSnap = await getDoc(doc(db, "settings", "footer"));
+                if (fSnap.exists()) footerYear = fSnap.data().year;
+                
+                updateStats();
+                renderTestimonials();
+                renderProjects();
+                document.getElementById('footerYear').value = footerYear;
+            } catch (e) { showToast("Sync failed", "error"); }
+        }
+
+        async function importLocalData() {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            const locT = JSON.parse(localStorage.getItem('appvertex_testimonials')) || [];
+            const locP = JSON.parse(localStorage.getItem('appvertex_projects')) || [];
+            if (locT.length === 0 && locP.length === 0) return showToast("Nothing to import", "info");
+            
+            showToast("Importing...", "info");
+            for (const t of locT) await setDoc(doc(db, "testimonials", t.id), t);
+            for (const p of locP) await setDoc(doc(db, "projects", p.id), p);
+            showToast("Import complete!");
+            loadDataFromCloud();
+        }
+
+        // Rendering & Helpers
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function updateStats() {
+            document.getElementById('statTestimonials').textContent = testimonials.length;
+            document.getElementById('statProjects').textContent = projects.length;
+            document.getElementById('statYear').textContent = footerYear;
+        }
+
+        function renderTestimonials() {
+            const list = document.getElementById('testimonialsList');
+            list.innerHTML = testimonials.map(t => `
+                <div class="list-item">
+                    ${t.image ? `<img src="${t.image}" class="item-image avatar">` : `<div class="item-image avatar" style="background:var(--primary); display:flex; align-items:center; justify-content:center; color:white;">${t.initials}</div>`}
+                    <div class="item-content"><strong>${t.name}</strong><br><small>${t.role}</small></div>
+                    <div class="item-actions">
+                        <button class="btn-icon" onclick='openTestimonialModal(${JSON.stringify(t).replace(/'/g,"&#39;")})'><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon" onclick="deleteTestimonial('${t.id}')" style="color:#ef4444;"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const list = document.getElementById('projectsList');
+            list.innerHTML = projects.map(p => `
+                <div class="list-item">
+                    ${p.image ? `<img src="${p.image}" class="item-image">` : `<div class="item-image" style="background:#333; display:flex; align-items:center; justify-content:center;">${p.emoji || '🚀'}</div>`}
+                    <div class="item-content"><strong>${p.name}</strong><br><small>${p.category}</small></div>
+                    <div class="item-actions">
+                        <button class="btn-icon" onclick='openProjectModal(${JSON.stringify(p).replace(/'/g,"&#39;")})'><i class="fas fa-edit"></i></button>
+                        <button class="btn-icon" onclick="deleteProject('${p.id}')" style="color:#ef4444;"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Modal Handlers
+        function openTestimonialModal(t = null) {
+            if (t) {
+                document.getElementById('testimonialId').value = t.id;
+                document.getElementById('testimonialName').value = t.name;
+                document.getElementById('testimonialRole').value = t.role;
+                document.getElementById('testimonialText').value = t.text;
+                if (t.image) {
+                    currentTestimonialImage = t.image;
+                    document.getElementById('testimonialPreview').src = t.image;
+                    document.getElementById('testimonialPreview').style.display = 'block';
+                    document.getElementById('testimonialPlaceholder').style.display = 'none';
+                }
+            }
+            document.getElementById('testimonialModal').classList.add('active');
+        }
+
+        async function saveTestimonial() {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            const id = document.getElementById('testimonialId').value || Date.now().toString();
+            const nameField = document.getElementById('testimonialName');
+            const name = nameField.value.trim();
+            
+            if (!name) return showToast("Name is required", "error");
+
+            showToast("Saving...", "info");
+            const imageUrl = await uploadImageToStorage(currentTestimonialImage, `testimonials/${id}`);
+
+            const data = {
+                id, name,
+                role: document.getElementById('testimonialRole').value,
+                rating: parseInt(document.getElementById('testimonialRating').value) || 5,
+                text: document.getElementById('testimonialText').value,
+                image: imageUrl,
+                initials: name.split(' ').map(n=>n[0]).filter(i=>i).join('').toUpperCase()
+            };
+
+            try {
+                await setDoc(doc(db, "testimonials", id), data);
+                showToast("Testimonial saved!");
+                closeModal('testimonialModal');
+                loadDataFromCloud();
+            } catch (e) {
+                console.error("Save error:", e);
+                showToast("Error saving: " + e.message, "error");
+            }
+        }
+
+        function openProjectModal(p = null) {
+            if (p) {
+                document.getElementById('projectId').value = p.id;
+                document.getElementById('projectName').value = p.name;
+                document.getElementById('projectYear').value = p.year;
+                document.getElementById('projectDesc').value = p.description;
+                document.getElementById('projectTech').value = (p.technologies || []).join(', ');
+                document.getElementById('projectLink').value = p.link || '';
+                if (p.image) {
+                    currentProjectImage = p.image;
+                    document.getElementById('projectPreview').src = p.image;
+                    document.getElementById('projectPreview').style.display = 'block';
+                    document.getElementById('projectPlaceholder').style.display = 'none';
+                }
+            } else {
+                const id = document.getElementById('projectId');
+                if (id) id.value = '';
+            }
+            document.getElementById('projectModal').classList.add('active');
+        }
+
+        async function saveProject() {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            const id = document.getElementById('projectId').value || Date.now().toString();
+            const name = document.getElementById('projectName').value.trim();
+
+            if (!name) return showToast("Project name is required", "error");
+
+            showToast("Saving...", "info");
+            const imageUrl = await uploadImageToStorage(currentProjectImage, `projects/${id}`);
+
+            const cat = document.getElementById('projectCategory').value;
+            let emoji = '🚀';
+            let color = 'linear-gradient(135deg,#7f1d1d,#991b1b)';
+
+            if (cat === 'ecommerce') { emoji = '🛍️'; color = 'linear-gradient(135deg,#7c2d12,#ea580c)'; }
+            else if (cat === 'school') { emoji = '🎓'; color = 'linear-gradient(135deg,#1e1b4b,#4338ca)'; }
+            else if (cat === 'brand') { emoji = '✨'; color = 'linear-gradient(135deg,var(--primary),var(--primary-dark))'; }
+
+            const data = {
+                id, name,
+                category: cat,
+                emoji, color,
+                year: parseInt(document.getElementById('projectYear').value) || 2025,
+                description: document.getElementById('projectDesc').value,
+                technologies: document.getElementById('projectTech').value.split(',').map(t=>t.trim()).filter(t=>t),
+                link: document.getElementById('projectLink').value.trim(),
+                image: imageUrl
+            };
+
+            try {
+                await setDoc(doc(db, "projects", id), data);
+                showToast("Project saved!");
+                closeModal('projectModal');
+                loadDataFromCloud();
+            } catch (e) {
+                console.error("Save error:", e);
+                showToast("Error saving: " + e.message, "error");
+            }
+        }
+
+        async function saveFooter() {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            const year = document.getElementById('footerYear').value;
+            await setDoc(doc(db, "settings", "footer"), { year });
+            loadDataFromCloud();
+            showToast("Saved");
+        }
+
+        // Image Upload Handler (with Auto-Resize)
+        function handleImageUpload(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgElement = new Image();
+                imgElement.onload = function() {
+                    const MAX_WIDTH = 800;
+                    const MAX_HEIGHT = 800;
+                    let width = imgElement.width;
+                    let height = imgElement.height;
+
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(imgElement, 0, 0, width, height);
+
+                    const resizedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    const preview = document.getElementById(type + 'Preview');
+                    const placeholder = document.getElementById(type + 'Placeholder');
+                    const upload = document.getElementById(type + 'ImageUpload');
+
+                    preview.src = resizedBase64;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    upload.classList.add('has-image');
+
+                    if (type === 'testimonial') currentTestimonialImage = resizedBase64;
+                    else currentProjectImage = resizedBase64;
+                    
+                    showToast("Image ready for save", "info");
+                };
+                imgElement.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            ['testimonialId','testimonialName','testimonialRole','testimonialText','projectId','projectName','projectDesc','projectTech'].forEach(i=>document.getElementById(i).value='');
+            document.getElementById('testimonialPreview').style.display='none';
+            document.getElementById('testimonialPlaceholder').style.display='block';
+            document.getElementById('projectPreview').style.display='none';
+            document.getElementById('projectPlaceholder').style.display='block';
+            currentTestimonialImage = null; currentProjectImage = null;
+        }
+
+        function showToast(msg, type="success") {
+            const t = document.createElement('div'); t.className = `toast ${type}`;
+            t.innerHTML = `<span>${msg}</span>`;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(()=>t.remove(), 3000);
+        }
+
+        // Export logic
+        function generateCode() {
+            fetch('index.html').then(r=>r.text()).then(html => {
+                let code = html;
+                code = code.replace(/© \d{4}/g, `© ${footerYear}`);
+                document.getElementById('codeOutput').textContent = code;
+            });
+        }
+        
+        async function copyCode() {
+            const text = document.getElementById('codeOutput').textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast("Copied code to clipboard!");
+            } catch (err) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast("Copied code to clipboard!");
+            }
+        }
+
+        function downloadCode() { const b = new Blob([document.getElementById('codeOutput').textContent], {type:'text/html'}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href=u; a.download='index.html'; a.click(); }
+
+        async function deleteTestimonial(id) {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            if (confirm("Are you sure you want to delete this testimonial?")) {
+                try {
+                    showToast("Deleting...", "info");
+                    await deleteDoc(doc(db, "testimonials", id));
+                    showToast("Deleted successfully");
+                    loadDataFromCloud();
+                } catch (e) {
+                    showToast("Error deleting: " + e.message, "error");
+                }
+            }
+        }
+
+        async function deleteProject(id) {
+            if (!auth.currentUser) return showToast("Must be logged in", "error");
+            if (confirm("Are you sure you want to delete this project?")) {
+                try {
+                    showToast("Deleting...", "info");
+                    await deleteDoc(doc(db, "projects", id));
+                    showToast("Deleted successfully");
+                    loadDataFromCloud();
+                } catch (e) {
+                    showToast("Error deleting: " + e.message, "error");
+                }
+            }
+        }
+
+        // Globals
+        window.handleLogin = handleLogin;
+        window.handleLogout = handleLogout;
+        window.showSection = showSection;
+        window.importLocalData = importLocalData;
+        window.openTestimonialModal = openTestimonialModal;
+        window.saveTestimonial = saveTestimonial;
+        window.deleteTestimonial = deleteTestimonial;
+        window.openProjectModal = openProjectModal;
+        window.saveProject = saveProject;
+        window.deleteProject = deleteProject;
+        window.saveFooter = saveFooter;
+        window.handleImageUpload = handleImageUpload;
+        window.closeModal = closeModal;
+        window.generateCode = generateCode;
+        window.copyCode = copyCode;
+        window.downloadCode = downloadCode;
+    </script>
+</body>
+</html>
