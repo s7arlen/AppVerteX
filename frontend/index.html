@@ -1788,8 +1788,8 @@
             .nav-links { display: none; }
             .cta-button { display: none; }
             .hamburger { display: flex; align-items: center; position: static; z-index: 3001; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; }
-            #hero { padding: 5rem 1rem 5rem; min-height: 100dvh; }
-            #hero h1 { font-size: clamp(2.8rem, 12vw, 5rem); line-height: 1.05; }
+            #hero { padding: 7.5rem 1rem 5rem; min-height: 100dvh; }
+            #hero h1 { font-size: clamp(3.2rem, 14vw, 5.8rem); line-height: 1.02; }
             #hero>p { font-size: 0.82rem; line-height: 1.8; }
             .scroll-hint { position: relative; bottom: auto; left: auto; margin-top: 2.5rem; }
             h2 { font-size: clamp(1.8rem, 7vw, 4.5rem); }
@@ -1816,8 +1816,8 @@
 
         @media (max-width: 480px) {
             body { font-size: 14px; }
-            #hero { min-height: auto; justify-content: flex-start; padding: 5rem 1rem 3rem; }
-            #hero h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); line-height: 1.08; margin-bottom: 1.5rem; }
+            #hero { min-height: auto; justify-content: flex-start; padding: 8rem 1rem 3rem; }
+            #hero h1 { font-size: clamp(2.7rem, 12.5vw, 4.2rem); line-height: 1.04; margin-bottom: 1.5rem; }
             #hero>p { font-size: 0.78rem; line-height: 1.7; margin-bottom: 2rem; }
             nav { padding: 0.8rem 1rem; display: flex; align-items: center; justify-content: space-between; }
             .theme-switcher { margin-right: 0.2rem; }
@@ -1826,6 +1826,126 @@
             .hero-buttons { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 1rem; }
             .btn-primary { padding: 0.9rem 2rem; font-size: 0.7rem; width: 100%; text-align: center; }
             .scroll-hint { margin-top: 3rem; position: relative; bottom: auto; left: auto; }
+        }
+
+        /* ═══════════════ MOBILE BOTTOM NAV DOCK ═══════════════ */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2500;
+            padding: 0.4rem 0.6rem max(0.5rem, env(safe-area-inset-bottom));
+            background: var(--nav-scrolled-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-top: 1px solid var(--border);
+            transition: background-color 0.35s ease, border-color 0.35s ease;
+            box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.35), 0 0 15px rgba(239, 68, 68, 0.08);
+        }
+
+        .mobile-nav-track {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            max-width: 500px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .mobile-nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 0.6rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            font-family: var(--mono);
+            padding: 0.35rem 0.4rem;
+            border-radius: 12px;
+            transition: color 0.25s ease, transform 0.2s ease;
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        .tab-icon-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            width: 28px;
+            height: 24px;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
+        }
+
+        .mobile-nav-tab::after {
+            content: '';
+            position: absolute;
+            bottom: 1px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 16px;
+            height: 2.5px;
+            background: var(--accent);
+            border-radius: 4px;
+            box-shadow: 0 0 8px var(--accent);
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .mobile-nav-tab.active {
+            color: var(--text);
+        }
+
+        .mobile-nav-tab.active .tab-icon-wrap {
+            color: var(--accent);
+            transform: translateY(-2px) scale(1.12);
+        }
+
+        .mobile-nav-tab.active::after {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        .mobile-nav-tab.nav-tab-cta {
+            background: var(--surface2);
+            border: 1px solid var(--accent);
+            border-radius: 999px;
+            padding: 0.35rem 0.5rem;
+            margin-left: 0.2rem;
+            color: var(--accent);
+        }
+
+        .mobile-nav-tab.nav-tab-cta.active,
+        .mobile-nav-tab.nav-tab-cta:active {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .mobile-nav-tab.nav-tab-cta.active .tab-icon-wrap,
+        .mobile-nav-tab.nav-tab-cta:active .tab-icon-wrap {
+            color: var(--bg);
+        }
+
+        .mobile-nav-tab.nav-tab-cta::after {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-bottom-nav {
+                display: block;
+            }
+            body {
+                padding-bottom: 3.8rem;
+            }
+            .hero-whatsapp-icon-btn {
+                bottom: 4.8rem !important;
+            }
         }
     </style>
     <!-- Google tag (gtag.js) -->
@@ -1916,6 +2036,32 @@
         <a href="#process" onclick="closeMobileMenu()">Process</a>
         <a href="#upskill" onclick="closeMobileMenu()">Upskill</a>
         <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION DOCK (App-Style) -->
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <div class="mobile-nav-track">
+            <a href="#hero" class="mobile-nav-tab active">
+                <div class="tab-icon-wrap"><i class="fas fa-home"></i></div>
+                <span class="tab-label">Home</span>
+            </a>
+            <a href="#services" class="mobile-nav-tab">
+                <div class="tab-icon-wrap"><i class="fas fa-bolt"></i></div>
+                <span class="tab-label">Services</span>
+            </a>
+            <a href="#projects" class="mobile-nav-tab">
+                <div class="tab-icon-wrap"><i class="fas fa-briefcase"></i></div>
+                <span class="tab-label">Work</span>
+            </a>
+            <a href="#upskill" class="mobile-nav-tab">
+                <div class="tab-icon-wrap"><i class="fas fa-rocket"></i></div>
+                <span class="tab-label">Upskill</span>
+            </a>
+            <a href="#contact" class="mobile-nav-tab nav-tab-cta">
+                <div class="tab-icon-wrap"><i class="fas fa-paper-plane"></i></div>
+                <span class="tab-label">Quote</span>
+            </a>
+        </div>
     </div>
 
     <!-- HERO -->
@@ -2409,6 +2555,52 @@
         const getApiEndpoint = () => {
             return 'https://us-central1-appvertex-e09c8.cloudfunctions.net/contact';
         };
+
+        /* ═══════════════════════════════════════════════════
+           MOBILE BOTTOM NAVIGATION — Scroll-Spy Active Tab
+           ═══════════════════════════════════════════════════ */
+        (() => {
+            const bottomNav = document.getElementById('mobileBottomNav');
+            if (!bottomNav) return;
+
+            const tabs = bottomNav.querySelectorAll('.mobile-nav-tab');
+            const targetIds = Array.from(tabs).map(tab => tab.getAttribute('href').replace('#', ''));
+
+            function updateActiveTab() {
+                const scrollPos = window.scrollY + window.innerHeight * 0.35;
+                let currentSectionId = targetIds[0];
+
+                for (let i = targetIds.length - 1; i >= 0; i--) {
+                    const sec = document.getElementById(targetIds[i]);
+                    if (sec && sec.offsetTop <= scrollPos) {
+                        currentSectionId = targetIds[i];
+                        break;
+                    }
+                }
+
+                tabs.forEach(tab => {
+                    const tid = tab.getAttribute('href').replace('#', '');
+                    if (tid === currentSectionId) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+            }
+
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        updateActiveTab();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            updateActiveTab();
+        })();
 
         /* ═══════════════════════════════════════════════════
            SHOOTING COMET SYSTEM — Canvas-based
