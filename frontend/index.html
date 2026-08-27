@@ -1793,7 +1793,10 @@
             #hero>p { font-size: 0.82rem; line-height: 1.8; }
             .scroll-hint { position: relative; bottom: auto; left: auto; margin-top: 2.5rem; }
             h2 { font-size: clamp(1.8rem, 7vw, 4.5rem); }
-            .stat-number { font-size: 2.2rem; }
+            .stat-group { display: flex; flex-wrap: nowrap; justify-content: space-between; gap: 1rem; width: 100%; }
+            .stat-item { flex: 1 1 0; min-width: 0; }
+            .stat-number { font-size: clamp(1.8rem, 6vw, 2.2rem); }
+            .stat-label { font-size: 0.58rem; letter-spacing: 0.08em; }
             #tagline { padding: 4rem 1.5rem; flex-direction: column; }
             #services, #about, #testimonials, #projects, #process, #upskill, #contact { padding: 3rem 1rem; }
             footer { padding: 2rem 1rem; flex-direction: column; text-align: center; gap: 1rem; }
@@ -1826,6 +1829,9 @@
             .hero-buttons { flex-direction: column; align-items: flex-start; gap: 1.2rem; margin-bottom: 1rem; }
             .btn-primary { padding: 0.9rem 2rem; font-size: 0.7rem; width: 100%; text-align: center; }
             .scroll-hint { margin-top: 3rem; position: relative; bottom: auto; left: auto; }
+            .stat-group { gap: 0.5rem; }
+            .stat-number { font-size: clamp(1.6rem, 7vw, 2rem); }
+            .stat-label { font-size: 0.52rem; letter-spacing: 0.05em; }
         }
 
         /* ═══════════════ MOBILE BOTTOM NAV DOCK ═══════════════ */
