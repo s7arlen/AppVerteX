@@ -101,8 +101,8 @@
             --surface-highlight: rgba(255, 255, 255, 0.03);
             --button-sheen: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
             --form-sheen: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
-            --noise-opacity: 0.4;
-            --canvas-opacity: 0.62;
+            --noise-opacity: 0.3;
+            --canvas-opacity: 0.45;
             --canvas-blend: normal;
             --theme-switch-bg: rgba(8, 12, 16, 0.76);
             --theme-switch-text: #ffffff;
@@ -125,8 +125,8 @@
             --surface-highlight: rgba(15, 23, 42, 0.04);
             --button-sheen: linear-gradient(135deg, rgba(15, 23, 42, 0.08), transparent);
             --form-sheen: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.08), transparent);
-            --noise-opacity: 0.14;
-            --canvas-opacity: 0.52;
+            --noise-opacity: 0.10;
+            --canvas-opacity: 0.30;
             --canvas-blend: multiply;
             --theme-switch-bg: rgba(255, 255, 255, 0.92);
             --theme-switch-text: #ffffff;
@@ -473,11 +473,11 @@
         }
 
         #galaxy-canvas.galaxy-ready {
-            opacity: 0.72;
+            opacity: 0.50;
         }
 
         html[data-theme="light"] #galaxy-canvas.galaxy-ready {
-            opacity: 0.28;
+            opacity: 0.18;
             mix-blend-mode: multiply;
         }
 
@@ -2648,9 +2648,9 @@
                     this.vx = Math.cos(angle) * speed;
                     this.vy = Math.sin(angle) * speed;
 
-                    this.length = Math.random() * 180 + 100;
-                    this.width = Math.random() * 2 + 1;
-                    this.opacity = Math.random() * 0.6 + 0.3;
+                    this.length = Math.random() * 120 + 70;
+                    this.width = Math.random() * 1.5 + 0.8;
+                    this.opacity = Math.random() * 0.3 + 0.2;
                     this.alive = true;
 
                     const palettes = [
@@ -2660,19 +2660,19 @@
                         ['#f0f4fa', '#fbbf24', '#dc2626'],
                     ];
                     this.colors = palettes[Math.floor(Math.random() * palettes.length)];
-                    this.glowRadius = Math.random() * 4 + 2;
+                    this.glowRadius = Math.random() * 3 + 1.5;
 
                     this.sparks = [];
-                    const sc = Math.floor(Math.random() * 5) + 3;
+                    const sc = Math.floor(Math.random() * 3) + 1;
                     for (let i = 0; i < sc; i++) {
                         this.sparks.push({
-                            ox: Math.random() * this.length * 0.3,
-                            oy: (Math.random() - 0.5) * 6,
-                            r: Math.random() * 1.5 + 0.5,
-                            a: Math.random()
+                            ox: Math.random() * this.length * 0.25,
+                            oy: (Math.random() - 0.5) * 4,
+                            r: Math.random() * 1.2 + 0.4,
+                            a: Math.random() * 0.6
                         });
                     }
-                    this.delay = forced ? 0 : Math.random() * 180;
+                    this.delay = forced ? 0 : Math.random() * 250 + 100;
                 }
 
                 update() {
@@ -2709,12 +2709,12 @@
                     ctx.fillStyle = grad;
                     ctx.fill();
 
-                    const headGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.glowRadius * 6);
-                    headGlow.addColorStop(0, hexToRgba(this.colors[0], this.opacity * 0.9));
-                    headGlow.addColorStop(0.3, hexToRgba(this.colors[1], this.opacity * 0.5));
+                    const headGlow = ctx.createRadialGradient(0, 0, 0, 0, 0, this.glowRadius * 5);
+                    headGlow.addColorStop(0, hexToRgba(this.colors[0], this.opacity * 0.85));
+                    headGlow.addColorStop(0.3, hexToRgba(this.colors[1], this.opacity * 0.45));
                     headGlow.addColorStop(1, 'rgba(0,0,0,0)');
                     ctx.beginPath();
-                    ctx.arc(0, 0, this.glowRadius * 6, 0, Math.PI * 2);
+                    ctx.arc(0, 0, this.glowRadius * 5, 0, Math.PI * 2);
                     ctx.fillStyle = headGlow;
                     ctx.fill();
 
@@ -2726,7 +2726,7 @@
                     this.sparks.forEach(s => {
                         ctx.beginPath();
                         ctx.arc(-s.ox, s.oy, s.r, 0, Math.PI * 2);
-                        ctx.fillStyle = hexToRgba(this.colors[1], s.a * this.opacity * 0.8);
+                        ctx.fillStyle = hexToRgba(this.colors[1], s.a * this.opacity * 0.7);
                         ctx.fill();
                     });
 
@@ -2741,7 +2741,7 @@
                 return `rgba(${r},${g},${b},${alpha})`;
             }
 
-            const MAX_COMETS = 6;
+            const MAX_COMETS = 4;
             const comets = [];
             for (let i = 0; i < MAX_COMETS; i++) comets.push(new Comet(false));
 
@@ -2818,15 +2818,15 @@
 
             function applySceneTheme() {
                 const isLight = root.dataset.theme === 'light';
-                ambient.intensity = isLight ? 0.2 : 0.34;
+                ambient.intensity = isLight ? 0.18 : 0.25;
                 wireMat.color.setHex(isLight ? 0x7f1d1d : 0xef4444);
-                wireMat.opacity = isLight ? 0.3 : 0.28;
+                wireMat.opacity = isLight ? 0.20 : 0.20;
                 wireMat2.color.setHex(isLight ? 0x9a3412 : 0xf97316);
-                wireMat2.opacity = isLight ? 0.2 : 0.19;
+                wireMat2.opacity = isLight ? 0.14 : 0.13;
                 tkMat.color.setHex(isLight ? 0x27272a : 0x94a3b8);
-                tkMat.opacity = isLight ? 0.14 : 0.16;
+                tkMat.opacity = isLight ? 0.10 : 0.11;
                 octMat.color.setHex(isLight ? 0x991b1b : 0xf87171);
-                octMat.opacity = isLight ? 0.3 : 0.3;
+                octMat.opacity = isLight ? 0.20 : 0.20;
             }
 
             applySceneTheme();
@@ -3427,9 +3427,9 @@
                     initSplashCursor({
                         RAINBOW_MODE: false,
                         COLOR: '#ef4444',
-                        SPLAT_RADIUS: 0.18,
-                        DENSITY_DISSIPATION: 3.8,
-                        VELOCITY_DISSIPATION: 2.2
+                        SPLAT_RADIUS: 0.14,
+                        DENSITY_DISSIPATION: 4.2,
+                        VELOCITY_DISSIPATION: 2.3
                     });
                 }).catch(err => console.warn("SplashCursor failed to load:", err));
             }
@@ -3580,20 +3580,18 @@ void main(){
             // ── Per-theme palette configs ──────────────────────────────────
             const THEMES = {
                 dark: {
-                    hueShift:      355,   // Luxury Crimson & Gold Stardust
-                    saturation:    0.7,
-                    glowIntensity: 0.24,
-                    density:       0.9,
-                    twinkle:       0.25
+                    hueShift:      355,
+                    saturation:    0.6,
+                    glowIntensity: 0.16,
+                    density:       0.55,
+                    twinkle:       0.18
                 },
                 light: {
-                    // Minimalist Soft Rose Gold & Slate Stardust
-                    // Soft, subtle, non-intrusive micro-particles that complement the crisp light mode
                     hueShift:      340,
-                    saturation:    0.2,
-                    glowIntensity: 0.14,
-                    density:       0.7,
-                    twinkle:       0.12
+                    saturation:    0.18,
+                    glowIntensity: 0.09,
+                    density:       0.35,
+                    twinkle:       0.08
                 }
             };
 
